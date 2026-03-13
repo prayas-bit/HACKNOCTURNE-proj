@@ -3,11 +3,83 @@
 <head>
     <title>Coverage Lens</title>
     <style>
-        body { width: 200px; padding: 10px; font-family: sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            width: 280px;
+            padding: 16px;
+            font-family: 'Segoe UI', sans-serif;
+            background: #0f172a;
+            color: #f8fafc;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .header h2 {
+            font-size: 16px;
+            color: #38bdf8;
+        }
+        #toggle-btn {
+            padding: 5px 14px;
+            border-radius: 20px;
+            border: none;
+            font-weight: 700;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .stats-card {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+        .stat-label { font-size: 11px; color: #94a3b8; margin-bottom: 4px; }
+        .stat-value { font-size: 20px; font-weight: bold; }
+        .file-list { margin-top: 12px; }
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 10px;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 8px;
+            margin-bottom: 6px;
+            font-size: 12px;
+        }
+        .file-name { color: #cbd5e1; }
+        .file-cov { font-weight: bold; }
+        .cov-high { color: #4ade80; }
+        .cov-med { color: #fbbf24; }
+        .cov-low { color: #f87171; }
+        .footer {
+            margin-top: 12px;
+            font-size: 10px;
+            color: #475569;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
-    <h3>Coverage Lens</h3>
-    <button id="toggle">Toggle Heatmap</button>
+    <div class="header">
+        <h2>Coverage Lens</h2>
+        <button id="toggle-btn">ON</button>
+    </div>
+
+    <div class="stats-card">
+        <div class="stat-label">Global Coverage</div>
+        <div class="stat-value" id="global-coverage">--%</div>
+    </div>
+
+    <div class="file-list" id="file-list">
+        <!-- Files will be injected here -->
+    </div>
+
+    <div class="footer" id="last-updated">Waiting for data...</div>
+
+    <script src="popup.js"></script>
 </body>
 </html>

@@ -2,17 +2,14 @@ const SERVER_URL = 'http://localhost:3000/coverage';
 const POLL_INTERVAL_MINUTES = 1;
 
 chrome.runtime.onInstalled.addListener(() => {
-  console.log("Extension installed");
-  
-  // Set the default side panel behavior
-  chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
-    .catch((error) => console.error(error));
-
-  // Create alarm for periodic polling
+  console.log("Coverage Lens installed");
   chrome.alarms.create('poll-coverage', { periodInMinutes: POLL_INTERVAL_MINUTES });
+  fetchCoverageData();
 });
 
-// Handle alarms
+// Also fetch on startup
+fetchCoverageData();
+
 chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === 'poll-coverage') {
     fetchCoverageData();

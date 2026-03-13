@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Coverage Lens - Side Panel</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 16px;
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+        h1 {
+            font-size: 1.5rem;
+            color: #38bdf8;
+            margin-bottom: 20px;
+        }
+        .stats-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        .stat-label { font-size: 0.875rem; color: #94a3b8; }
+        .stat-value { font-size: 1.25rem; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <h1 style="margin: 0;">Coverage Lens</h1>
+        <button id="toggle-side" style="padding: 6px 12px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer;">ON</button>
+    </div>
+    <div class="stats-card">
+        <div class="stat-label">Global Coverage</div>
+        <div class="stat-value" id="global-coverage">--%</div>
+    </div>
+    <div class="stats-card">
+        <div class="stat-label">Selected Element</div>
+        <div class="stat-value" id="selected-element">None</div>
+    </div>
+    <script src="sidepanel.js"></script>
+</body>
+</html>
