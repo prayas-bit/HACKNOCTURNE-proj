@@ -1,13 +1,8 @@
 import React from 'react';
-import { Button } from './components/Button';
+import { Dashboard } from './components/Dashboard';
 
 function App() {
-  return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold mb-4">Coverage Lens Demo</h1>
-      <Button label="Click Me" />
-    </div>
-  );
+  return <Dashboard />;
 }
 
 export default App;

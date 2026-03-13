@@ -38,9 +38,10 @@ export function transformCode(code, filename, options = {}) {
 
   let transformSync
   try {
-    transformSync = require('@babel/core').transformSync
+    const projectRequire = createRequire(path.join(process.cwd(), 'package.json'))
+    transformSync = projectRequire('@babel/core').transformSync
   } catch {
-    console.warn('[source-path-plugin] @babel/core not found — skipping transform')
+    console.warn('[source-path-plugin] @babel/core not found in project — skipping transform')
     return null
   }
 
