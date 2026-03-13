@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
-import { Sidebar } from '../../components/Sidebar';
+import { Sidebar } from '../components/Sidebar';
 
 describe('Sidebar Component', () => {
   it('renders the admin title', () => {
