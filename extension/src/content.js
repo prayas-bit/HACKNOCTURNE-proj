@@ -16,24 +16,23 @@ async function renderHeatmap() {
     if (!data || !data.files) return;
 
     // Scan for elements tagged by the Vite plugin
-    const components = document.querySelectorAll('[data-source-file]');
+    const components = document.querySelectorAll('[data-source-path]');
     
     components.forEach(el => {
-        const filePath = el.getAttribute('data-source-file');
-        const fileData = data.files.find(f => filePath.endsWith(f.name));
+       const filePath = el.getAttribute('data-source-path').split(':')[0]
+const fileData = data.files.find(f => f.path === filePath);
         if (fileData) createOverlay(el, fileData);
     });
 
     // Fallback for demo elements without the Vite plugin tag
     if (components.length === 0) {
-        const fallbackComponents = document.querySelectorAll('button, h1');
-        fallbackComponents.forEach(el => {
-            let fileData = null;
-            if (el.tagName === 'BUTTON') fileData = data.files.find(f => f.name === 'Button.tsx');
-            if (el.tagName === 'H1') fileData = data.files.find(f => f.name === 'App.tsx');
-            if (fileData) createOverlay(el, fileData);
-        });
-    }
+    const fallbackElements = document.querySelectorAll('div, section, header, footer, nav, main, button, h1, h2, p')
+    fallbackElements.forEach((el, index) => {
+        // Cycle through your files to assign coverage data
+        const fileData = data.files[index % data.files.length]
+        if (fileData) createOverlay(el, fileData)
+    })
+}
 }
 
 function createOverlay(targetEl, fileData) {
@@ -42,10 +41,10 @@ function createOverlay(targetEl, fileData) {
     
     // Color class based on coverage percentage
     let colorClass, badgeClass;
-    if (fileData.coverage >= 80) {
+    if (fileData.score >= 80) {
         colorClass = 'coverage-high';
         badgeClass = 'badge-high';
-    } else if (fileData.coverage >= 50) {
+    } else if (fileData.score >= 50) {
         colorClass = 'coverage-med';
         badgeClass = 'badge-med';
     } else {
@@ -62,7 +61,7 @@ function createOverlay(targetEl, fileData) {
     // Add a coverage badge
     const badge = document.createElement('span');
     badge.className = `coverage-lens-badge ${badgeClass}`;
-    badge.textContent = `${fileData.coverage}%`;
+    badge.textContent = `${fileData.score}%`;
     overlay.appendChild(badge);
 
     // Tooltip behavior
@@ -83,20 +82,20 @@ function showTooltip(e, fileData) {
 
     // Bar color
     let barColor = '#ef4444';
-    if (fileData.coverage >= 80) barColor = '#22c55e';
-    else if (fileData.coverage >= 50) barColor = '#eab308';
+    if (fileData.score >= 80) barColor = '#22c55e';
+    else if (fileData.score >= 50) barColor = '#eab308';
 
     // Percent color
     let percentColor = '#f87171';
-    if (fileData.coverage >= 80) percentColor = '#4ade80';
-    else if (fileData.coverage >= 50) percentColor = '#fbbf24';
+    if (fileData.score >= 80) percentColor = '#4ade80';
+    else if (fileData.score >= 50) percentColor = '#fbbf24';
 
     activeTooltip.innerHTML = `
-        <div class="tooltip-filename">${fileData.name}</div>
+        <div class="tooltip-filename">${fileData.path}</div>
         <div class="tooltip-bar-bg">
-            <div class="tooltip-bar-fill" style="width: ${fileData.coverage}%; background: ${barColor};"></div>
+            <div class="tooltip-bar-fill" style="width: ${fileData.score}%; background: ${barColor};"></div>
         </div>
-        <div class="tooltip-percent" style="color: ${percentColor};">${fileData.coverage}%</div>
+        <div class="tooltip-percent" style="color: ${percentColor};">${fileData.score}%</div>
     `;
 
     // Position near cursor

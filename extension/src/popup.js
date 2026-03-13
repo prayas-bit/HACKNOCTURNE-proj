@@ -28,25 +28,24 @@ function renderCoverage(data) {
 
     globalCoverageEl.textContent = `${data.global}%`;
 
-    // Color the global value
     if (data.global >= 80) globalCoverageEl.className = 'stat-value cov-high';
     else if (data.global >= 50) globalCoverageEl.className = 'stat-value cov-med';
     else globalCoverageEl.className = 'stat-value cov-low';
 
-    // Render file list
     fileListEl.innerHTML = '';
     if (data.files && data.files.length > 0) {
         data.files.forEach(file => {
             const div = document.createElement('div');
             div.className = 'file-item';
 
+            const coverage = file.score  // changed from file.coverage
             let covClass = 'cov-low';
-            if (file.coverage >= 80) covClass = 'cov-high';
-            else if (file.coverage >= 50) covClass = 'cov-med';
+            if (coverage >= 80) covClass = 'cov-high';
+            else if (coverage >= 50) covClass = 'cov-med';
 
             div.innerHTML = `
-                <span class="file-name">${file.name}</span>
-                <span class="file-cov ${covClass}">${file.coverage}%</span>
+                <span class="file-name">${file.path}</span>
+                <span class="file-cov ${covClass}">${coverage}%</span>
             `;
             fileListEl.appendChild(div);
         });

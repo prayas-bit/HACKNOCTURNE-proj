@@ -8,6 +8,9 @@
     "activeTab",
     "alarms"
   ],
+  "host_permissions": [
+    "http://localhost:3000/*"
+  ],
   "background": {
     "service_worker": "src/background.js"
   },
