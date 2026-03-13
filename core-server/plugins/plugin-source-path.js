@@ -1,19 +1,8 @@
-/**
- * Objective 1 (continued) — Vite Plugin: data-source-path injection
- * File: core-server/src/plugin-source-path.js
- *
- * Transforms every .jsx/.tsx file at build time, inserting
- *   data-source-path="src/components/Button.tsx:42"
- * as the first attribute on every JSX opening element.
- *
- * Usage in vite.config.ts:
- *   import { viteSourcePathPlugin } from './plugin-source-path'
- *   export default { plugins: [viteSourcePathPlugin()] }
- */
-
 import path from 'node:path'
+import { createRequire } from 'node:module'
 
-// ─── Vite plugin wrapper ──────────────────────────────────────────────────────
+const require = createRequire(import.meta.url)
+
 export function viteSourcePathPlugin(options = {}) {
   const {
     rootDir        = process.cwd(),
@@ -31,7 +20,7 @@ export function viteSourcePathPlugin(options = {}) {
     enforce: 'pre',
 
     transform(code, id) {
-      if (!/\.[jt]sx$/.test(id)) return null
+      if (!id.endsWith('.jsx')) return null
       if (id.includes('node_modules')) return null
       return transformCode(code, id, { rootDir, attributeName, includeLineNum })
     },
@@ -40,17 +29,16 @@ export function viteSourcePathPlugin(options = {}) {
 
 export default viteSourcePathPlugin
 
-// ─── Core transform ───────────────────────────────────────────────────────────
 export function transformCode(code, filename, options = {}) {
   const {
-    rootDir       = process.cwd(),
-    attributeName = 'data-source-path',
+    rootDir        = process.cwd(),
+    attributeName  = 'data-source-path',
     includeLineNum = true,
   } = options
 
   let transformSync
   try {
-    ;({ transformSync } = require('@babel/core'))
+    transformSync = require('@babel/core').transformSync
   } catch {
     console.warn('[source-path-plugin] @babel/core not found — skipping transform')
     return null
@@ -62,9 +50,10 @@ export function transformCode(code, filename, options = {}) {
     babelrc:     false,
     retainLines: true,
     sourceMaps:  true,
+    parserOpts: {
+      plugins: ['jsx'],
+    },
     plugins: [
-      require('@babel/plugin-syntax-jsx'),
-      require('@babel/plugin-syntax-typescript').default ?? require('@babel/plugin-syntax-typescript'),
       babelVisitorPlugin({ rootDir, attributeName, includeLineNum }),
     ],
   })
@@ -72,7 +61,6 @@ export function transformCode(code, filename, options = {}) {
   return result ? { code: result.code, map: result.map } : null
 }
 
-// ─── Babel visitor factory ────────────────────────────────────────────────────
 function babelVisitorPlugin({ rootDir, attributeName, includeLineNum }) {
   return function ({ types: t }) {
     return {
