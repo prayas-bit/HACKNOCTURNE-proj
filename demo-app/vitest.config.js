@@ -4,8 +4,11 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     coverage: {
-      provider: 'v8',
-      reporter: ['text', 'json', 'html', 'lcov'],
+      provider: 'istanbul',
+      reporter: ['text', 'lcov'],
+      reportsDirectory: './coverage',
+      include: ['src/components/**/*.jsx', 'src/App.jsx'],
+      all: true,
     },
   },
 });

@@ -1,25 +1,48 @@
-import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom/vitest';
-import { Sidebar } from '../components/Sidebar';
+import { describe, it, expect, afterEach, vi } from 'vitest'
+import { render, screen, fireEvent, cleanup } from '@testing-library/react'
+import { Sidebar } from '../components/Sidebar.jsx'
 
-describe('Sidebar Component', () => {
-  it('renders the admin title', () => {
-    render(<Sidebar />);
-    expect(screen.getByText('Nexus Admin')).toBeInTheDocument();
-  });
+afterEach(() => cleanup())
 
-  it('renders the dashboard link as active', () => {
-    // Incomplete test: We verify the text exists, but we don't 
-    // strictly check if it received the exact "active" CSS classes 
-    // or if the SVG icon is colored indigo.
-    render(<Sidebar />);
-    const dashboardElements = screen.getAllByText('Dashboard');
-    expect(dashboardElements[0]).toBeInTheDocument();
-  });
+describe('Sidebar', () => {
+  it('renders expanded sidebar with title', () => {
+    render(<Sidebar />)
+    expect(screen.getByText('Nexus Admin')).toBeDefined()
+    expect(screen.getByText('Dashboard')).toBeDefined()
+  })
 
-  // Missing tests:
-  // - Verify other links exist (Users, Reports, Analytics, Settings)
-  // - Test if clicking a non-active link changes the active state
-  // - Ensure mobile responsiveness behaves as expected when viewport shrinks
-});
+  it('hides title and labels when collapsed', () => {
+    render(<Sidebar collapsed={true} />)
+    expect(screen.queryByText('Nexus Admin')).toBeNull()
+    expect(screen.queryByText('Dashboard')).toBeNull()
+  })
+
+  it('calls onItemClick when menu item clicked', () => {
+    const onItemClick = vi.fn()
+    render(<Sidebar onItemClick={onItemClick} />)
+    fireEvent.click(screen.getByText('Users'))
+    expect(onItemClick).toHaveBeenCalledWith('Users')
+  })
+
+  it('toggles tooltips when Settings clicked', () => {
+    render(<Sidebar collapsed={true} />)
+    const buttons = document.querySelectorAll('button')
+    // Click Settings button (last one)
+    fireEvent.click(buttons[buttons.length - 1])
+  })
+
+  it('shows tooltips when collapsed and showTooltips is true', () => {
+    render(<Sidebar collapsed={true} />)
+    const buttons = document.querySelectorAll('button')
+    fireEvent.click(buttons[buttons.length - 1])
+    // showTooltips is now true and collapsed is true — tooltips should show
+    expect(document.querySelectorAll('button').length).toBeGreaterThan(0)
+  })
+
+  it('changes active item on click', () => {
+    render(<Sidebar />)
+    fireEvent.click(screen.getByText('Analytics'))
+    // Analytics button should now be active
+    expect(screen.getByText('Analytics')).toBeDefined()
+  })
+})

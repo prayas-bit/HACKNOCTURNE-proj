@@ -68,6 +68,14 @@ function babelVisitorPlugin({ rootDir, attributeName, includeLineNum }) {
       name: 'babel-source-path',
       visitor: {
         JSXOpeningElement(nodePath, state) {
+          // Skip if parent JSXElement's parent is also a JSXElement
+          // This ensures we only tag the ROOT element of each component
+          const jsxElementPath = nodePath.parentPath
+          if (
+            jsxElementPath.parent.type === 'JSXElement' ||
+            jsxElementPath.parent.type === 'JSXFragment'
+          ) return
+
           const filename = state.filename || 'unknown'
           const rel = path.relative(rootDir, filename).replace(/\\/g, '/')
 
