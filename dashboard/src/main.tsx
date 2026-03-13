@@ -1,17 +1,17 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import BlastRadiusPanel from "./components/BlastRadiusPanel";
 
 function App() {
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold mb-4">Coverage Lens Dashboard</h1>
-      <p>Blast Radius graphs and coverage analytics will be displayed here.</p>
+    <div>
+      <BlastRadiusPanel serverUrl="http://localhost:3000" />
     </div>
   );
 }
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>
+  </React.StrictMode>,
 );
