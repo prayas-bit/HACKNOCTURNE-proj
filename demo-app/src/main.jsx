@@ -1,12 +1,74 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+import { Network } from "@requestly/web-sdk";
+import './index.css';
 
-// Requestly SDK Initialization could go here
-console.log("Initializing Demo App...");
+const STORAGE_KEY = "RQ_MOCKED_STATES";
+
+// Helper to apply rules
+const applyRules = (rules) => {
+    Object.keys(rules).forEach(url => {
+        const { status, body } = rules[url];
+        Network.intercept(new RegExp(url), (args) => {
+            console.log(`🚀 Requestly: Mocking persistent request to ${args.url}`);
+            return {
+                status: parseInt(status) || 500,
+                body: body || {
+                    error: "Persistent Error State via Coverage Heatmap",
+                    success: false
+                }
+            };
+        }, true);
+    });
+};
+
+// 1. Re-apply rules from LocalStorage on boot
+const savedRules = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+applyRules(savedRules);
+
+if (Object.keys(savedRules).length > 0) {
+    console.log("♻️ Requestly: Restored persisted mock states", savedRules);
+}
+
+// 2. The Bridge: Listen for "FORCE_MOCK_STATE" from the Chrome Extension
+window.addEventListener("message", async (event) => {
+    try {
+        const data = event.data;
+        if (!data || typeof data !== "object") return;
+
+        if (data.type === "FORCE_MOCK_STATE") {
+            const { url, status, body } = data.payload || {};
+            if (!url) return;
+
+            console.log(`🎯 Heatmap Command: Intercepting ${url} with status ${status}`);
+
+            // Save to LocalStorage for persistence
+            const rules = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+            rules[url] = { status, body };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(rules));
+
+            // Refresh ensures the UI hits the newly intercepted mock
+            setTimeout(() => {
+                window.location.reload();
+            }, 100);
+        }
+
+        if (data.type === "CLEAR_MOCK_STATE") {
+            console.log("🧹 Requestly: Clearing all persistent states");
+            localStorage.removeItem(STORAGE_KEY);
+            Network.clearInterceptors();
+            setTimeout(() => {
+                window.location.reload();
+            }, 100);
+        }
+    } catch (e) {
+        console.error("Requestly Integration Error:", e);
+    }
+});
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>
 );
