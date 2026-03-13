@@ -6,20 +6,32 @@ import './index.css';
 
 const STORAGE_KEY = "RQ_MOCKED_STATES";
 
-// Helper to apply rules
+// Helper to apply rules safely with escaped regex
 const applyRules = (rules) => {
     Object.keys(rules).forEach(url => {
+        // Skip invalid/empty URLs
+        if (!url || url.trim() === '') return;
+        
         const { status, body } = rules[url];
-        Network.intercept(new RegExp(url), (args) => {
-            console.log(`🚀 Requestly: Mocking persistent request to ${args.url}`);
-            return {
-                status: parseInt(status) || 500,
-                body: body || {
-                    error: "Persistent Error State via Coverage Heatmap",
-                    success: false
-                }
-            };
-        }, true);
+        
+        try {
+            // Escape the URL string so regex special chars are treated literally
+            const escapedUrl = url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const pattern = new RegExp(escapedUrl);
+            
+            Network.intercept(pattern, (args) => {
+                console.log(`🚀 Requestly: Mocking persistent request to ${args.url}`);
+                return {
+                    status: parseInt(status) || 500,
+                    body: body || {
+                        error: "Persistent Error State via Coverage Heatmap",
+                        success: false
+                    }
+                };
+            }, true);
+        } catch (err) {
+            console.error("Failed to construct Requestly interceptor for URL:", url, err);
+        }
     });
 };
 

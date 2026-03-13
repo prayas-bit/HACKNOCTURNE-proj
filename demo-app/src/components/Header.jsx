@@ -19,6 +19,30 @@ export const Header = () => {
       </div>
       
       <div className="flex items-center space-x-4">
+        {/* DEV TOOLS: Requestly Test Buttons */}
+        <div className="flex bg-slate-800 rounded-lg p-1 border border-slate-700">
+          <button 
+            onClick={() => {
+              window.postMessage({
+                type: "FORCE_MOCK_STATE",
+                payload: { url: "stats", status: 500, body: { error: "DevTools: Forced 500 Error" } }
+              }, "*");
+            }}
+            className="px-3 py-1 text-xs font-semibold text-rose-400 hover:text-rose-300 hover:bg-slate-700 rounded transition-colors"
+          >
+            🐛 Inject Bug
+          </button>
+          <div className="w-px bg-slate-700 my-1 mx-1"></div>
+          <button 
+            onClick={() => {
+              window.postMessage({ type: "CLEAR_MOCK_STATE" }, "*");
+            }}
+            className="px-3 py-1 text-xs font-semibold text-emerald-400 hover:text-emerald-300 hover:bg-slate-700 rounded transition-colors"
+          >
+            🧹 Clear
+          </button>
+        </div>
+
         <button className="relative text-slate-400 hover:text-white transition-colors p-2 hover:bg-slate-800 rounded-full">
           <Bell size={20} />
           <span className="absolute top-1 right-2 w-2 h-2 bg-rose-500 rounded-full animate-ping"></span>
