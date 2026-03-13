@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+.npm
+.eslintcache
+
+# Build outputs
+/dist
+/build
+/out
+*.js.map
+
+# Coverage
+/coverage
+*.lcov
+lcov.info
+
+# IDE/System
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+
+# Environment
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Extension specific
+extension/dist/
+
+# Server specific
+core-server/*.js
+!core-server/server.js # Keep the JS version if using it directly
