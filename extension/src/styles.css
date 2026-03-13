@@ -71,6 +71,32 @@
   min-width: 160px;
 }
 
+.coverage-tooltip-pinned {
+  pointer-events: auto !important;
+}
+
+.tooltip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.tooltip-close-btn {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0 2px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.tooltip-close-btn:hover {
+  color: #f1f5f9;
+}
+
 .tooltip-filename {
   font-weight: 700;
   font-size: 13px;
@@ -96,4 +122,128 @@
 .tooltip-percent {
   font-size: 18px;
   font-weight: 800;
+}
+
+/* ===== Tooltip Action Buttons (Force-State) ===== */
+.tooltip-actions {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.tooltip-actions-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+
+.tooltip-inject-btn {
+  display: block;
+  width: 100%;
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'Segoe UI', sans-serif;
+  color: #fca5a5;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+  pointer-events: auto !important;
+}
+
+.tooltip-inject-btn:hover {
+  background: rgba(239, 68, 68, 0.35);
+  color: #fef2f2;
+  border-color: rgba(239, 68, 68, 0.6);
+  transform: translateX(2px);
+}
+
+.tooltip-clear-btn {
+  display: block;
+  width: 100%;
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'Segoe UI', sans-serif;
+  color: #86efac;
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+  pointer-events: auto !important;
+  margin-top: 4px;
+}
+
+/* ===== Tooltip Insights ===== */
+.tooltip-insights {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tooltip-insights-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #fbbf24;
+  margin-bottom: 4px;
+}
+
+.tooltip-insights-list {
+  margin: 0;
+  padding-left: 16px;
+  font-size: 10px;
+  color: #cbd5e1;
+  list-style-type: disc;
+}
+.tooltip-insights-list li {
+  margin-bottom: 3px;
+}
+
+.tooltip-clear-btn:hover {
+  background: rgba(34, 197, 94, 0.35);
+  color: #f0fdf4;
+  border-color: rgba(34, 197, 94, 0.6);
+  transform: translateX(2px);
+}
+
+/* ===== Floating Clear Button (Always Visible) ===== */
+.coverage-lens-floating-clear {
+  position: fixed !important;
+  bottom: 24px !important;
+  right: 24px !important;
+  z-index: 2147483647 !important;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: 'Segoe UI', sans-serif;
+  color: white;
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  border: 2px solid #fca5a5;
+  border-radius: 12px;
+  cursor: pointer;
+  pointer-events: auto !important;
+  box-shadow: 0 4px 20px rgba(220, 38, 38, 0.4), 0 0 0 4px rgba(220, 38, 38, 0.15);
+  transition: all 0.2s ease;
+  animation: pulse-clear 2s infinite;
+}
+
+.coverage-lens-floating-clear:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 28px rgba(220, 38, 38, 0.5), 0 0 0 6px rgba(220, 38, 38, 0.2);
+}
+
+@keyframes pulse-clear {
+  0%, 100% { box-shadow: 0 4px 20px rgba(220, 38, 38, 0.4), 0 0 0 4px rgba(220, 38, 38, 0.15); }
+  50% { box-shadow: 0 4px 20px rgba(220, 38, 38, 0.6), 0 0 0 8px rgba(220, 38, 38, 0.1); }
 }

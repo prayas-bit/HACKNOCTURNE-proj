@@ -16,6 +16,11 @@ export const fetchStats = async () => {
     }
 
     // 2. We got a response. This means Requestly successfully intercepted the call!
+    // Handle 204 No Content — it's technically "ok" but means no data
+    if (response.status === 204) {
+        throw new Error("HTTP 204 — No Data Found");
+    }
+
     if (!response.ok) {
         let msg = `HTTP ${response.status}`;
         try {
@@ -39,3 +44,22 @@ export const MOCK_STATS_DATA = [
   { title: 'Sales', value: '+12,234', trend: '-4.1%', isPositive: false, colorClass: 'bg-indigo-500' },
   { title: 'Active Now', value: '573', trend: '+201', isPositive: true, colorClass: 'bg-purple-500' }
 ];
+
+export const fetchSystemStatus = async () => {
+    let response;
+    try {
+        response = await fetch('/api/v1/system-status');
+    } catch (err) {
+        return { status: "Operational", uptime: "99.99%", latency: "42ms" };
+    }
+
+    if (!response.ok) {
+        throw new Error(`System Error: HTTP ${response.status}`);
+    }
+    
+    try {
+        return await response.json();
+    } catch (e) {
+        return { status: "Operational", uptime: "99.99%", latency: "42ms" };
+    }
+};

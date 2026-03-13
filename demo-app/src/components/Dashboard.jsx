@@ -1,17 +1,12 @@
-import React from "react";
-import { Sidebar } from "./Sidebar";
-import { Header } from "./Header";
-import { StatCard } from "./StatCard";
-import { Button } from "./Button";
-import {
-  Users,
-  DollarSign,
-  Activity,
-  ShoppingCart,
-  AlertCircle,
-  Loader2,
-} from "lucide-react";
-import { fetchStats } from "../api";
+import React from 'react';
+import { Sidebar } from './Sidebar';
+import { Header } from './Header';
+import { StatCard } from './StatCard';
+import { RevenueChart } from './RevenueChart';
+import { RecentActivity } from './RecentActivity';
+import { SystemStatus } from './SystemStatus';
+import { Users, DollarSign, Activity, ShoppingCart, AlertCircle, Loader2 } from 'lucide-react';
+import { fetchStats } from '../api';
 
 export const Dashboard = () => {
   const [stats, setStats] = React.useState([]);
@@ -80,15 +75,26 @@ export const Dashboard = () => {
                   </div>
                 ))
               ) : error ? (
-                <div className="col-span-full py-12 px-8 bg-rose-500/5 border border-rose-500/20 rounded-2xl flex flex-col items-center text-center">
+              <div className="col-span-full py-12 px-8 bg-rose-500/5 border border-rose-500/20 rounded-2xl flex flex-col items-center text-center">
                   <div className="w-12 h-12 bg-rose-500/10 rounded-full flex items-center justify-center text-rose-500 mb-4 shadow-lg shadow-rose-500/20">
                     <AlertCircle size={24} />
                   </div>
-                  <h3 className="text-lg font-semibold text-white mb-1">
-                    Could not fetch statistics
-                  </h3>
-                  <p className="text-rose-400 text-sm max-w-xs">{error}</p>
-                  <button
+                  {/* Show HTTP status code prominently if it's in the error message */}
+                  {error.match(/HTTP (\d{3})/) ? (
+                    <>
+                      <span className="text-4xl font-black text-rose-500 mb-2 tracking-tight">
+                        {error.match(/HTTP (\d{3})/)[0]}
+                      </span>
+                      <h3 className="text-lg font-semibold text-white mb-1">
+                        {error.replace(/HTTP \d{3}\s*[-—]?\s*/, '') || 'Server Error'}
+                      </h3>
+                    </>
+                  ) : (
+                    <h3 className="text-lg font-semibold text-white mb-1">Could not fetch statistics</h3>
+                  )}
+                  <p className="text-rose-400 text-sm max-w-xs mt-1">{error}</p>
+                  <p className="text-slate-500 text-xs mt-2">Injected via Coverage Heatmap</p>
+                  <button 
                     onClick={() => window.location.reload()}
                     className="mt-6 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-sm font-medium transition-colors border border-slate-700"
                   >
@@ -102,38 +108,10 @@ export const Dashboard = () => {
 
             {/* Placeholder for content below */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2 bg-slate-800/40 border border-slate-700/50 rounded-2xl h-96 p-6 backdrop-blur-sm">
-                <h3 className="text-lg font-semibold text-white mb-4">
-                  Revenue Overview
-                </h3>
-                <div className="w-full h-[calc(100%-2rem)] flex items-center justify-center border-2 border-dashed border-slate-700/50 rounded-xl text-slate-500 hover:border-slate-600 transition-colors cursor-pointer">
-                  <div className="text-center">
-                    <Activity
-                      size={48}
-                      className="mx-auto mb-4 text-slate-600"
-                    />
-                    <p>Chart Component Placeholder</p>
-                  </div>
-                </div>
-              </div>
-              <div className="bg-slate-800/40 border border-slate-700/50 rounded-2xl h-96 p-6 backdrop-blur-sm">
-                <h3 className="text-lg font-semibold text-white mb-4">
-                  Recent Activity
-                </h3>
-                <div className="space-y-4">
-                  {[1, 2, 3, 4, 5].map((i) => (
-                    <div
-                      key={i}
-                      className="flex items-center space-x-4 p-3 hover:bg-slate-700/30 rounded-xl transition-colors cursor-pointer group"
-                    >
-                      <div className="w-10 h-10 rounded-full bg-slate-700 flex-shrink-0 group-hover:scale-110 transition-transform"></div>
-                      <div className="flex-1">
-                        <div className="h-4 bg-slate-700 rounded w-3/4 mb-2 group-hover:bg-slate-600 transition-colors"></div>
-                        <div className="h-3 bg-slate-700/50 rounded w-1/2"></div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+              <RevenueChart />
+              <div className="flex flex-col gap-6">
+                <SystemStatus />
+                <RecentActivity />
               </div>
             </div>
           </div>
