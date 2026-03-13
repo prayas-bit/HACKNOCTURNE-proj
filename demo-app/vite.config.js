@@ -16,7 +16,7 @@ export default defineConfig({
       reporter: ['lcov', 'text'],
       reportsDirectory: './coverage',
       include: ['src/components/**/*.jsx', 'src/App.jsx'],
-      all: false, 
+      all: true, 
     },
   }
 })
