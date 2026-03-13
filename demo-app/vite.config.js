@@ -7,4 +7,14 @@ export default defineConfig({
     viteSourcePathPlugin(),
     react(),
   ],
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    setupFiles: [],
+    coverage: {
+      provider: 'v8',
+      reporter: ['lcov'],
+      reportsDirectory: './coverage'
+    },
+  }
 })
