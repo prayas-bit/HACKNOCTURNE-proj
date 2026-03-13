@@ -1,0 +1,15 @@
+{
+  "name": "coverage-lens-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start:server": "cd core-server && npm run dev",
+    "start:demo": "cd demo-app && npm run dev",
+    "start:dashboard": "cd dashboard && npm run dev",
+    "start:all": "concurrently \"npm run start:server\" \"npm run start:demo\" \"npm run start:dashboard\"",
+    "test:all": "cd demo-app && npm test"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}

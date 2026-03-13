@@ -1,0 +1,6 @@
+/* Tooltip and overlay styles */
+.coverage-lens-overlay {
+    position: absolute;
+    pointer-events: none;
+    z-index: 10000;
+}
